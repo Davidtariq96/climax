@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:climax/screens/location_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:climax/services/weather_model.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
@@ -9,14 +12,29 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
+  void getLocation() async {
+    WeatherModel weatherModel = WeatherModel();
+    var weatherData = await weatherModel.getLocationData();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LocationScreen(
+                  locationWeatherData: weatherData,
+                )));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            //Get the current location
-          },
-          child: const Text('Get Location'),
+        child: SpinKitSpinningLines(
+          color: Colors.white,
+          size: 100.0,
         ),
       ),
     );
